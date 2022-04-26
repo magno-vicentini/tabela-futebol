@@ -1,4 +1,5 @@
 import * as express from 'express';
+import routes from './database/routes';
 
 class App {
   public app: express.Express;
@@ -7,7 +8,7 @@ class App {
   constructor() {
     this.app = express();
     this.config();
-    // ...
+    this.routerConfig();
   }
 
   private config():void {
@@ -21,6 +22,11 @@ class App {
     this.app.use(accessControl);
     this.app.use(express.json());
     // ...
+  }
+
+  private routerConfig(): void {
+    console.log('alou');
+    this.app.use(routes);
   }
 
   // ...
