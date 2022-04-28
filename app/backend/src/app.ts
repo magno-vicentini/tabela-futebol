@@ -8,7 +8,7 @@ class App {
   constructor() {
     this.app = express();
     this.config();
-    this.routerConfig();
+    this.app.use(routes);
   }
 
   private config():void {
@@ -24,10 +24,10 @@ class App {
     // ...
   }
 
-  private routerConfig(): void {
-    console.log('alou');
-    this.app.use(routes);
-  }
+  // private routerConfig(): void {
+  //   console.log('alou');
+  //   this.app.use(routes);
+  // }
 
   // ...
   public start(PORT: string | number):void {

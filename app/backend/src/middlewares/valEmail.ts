@@ -7,7 +7,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
 
   if (!email) {
     return res.status(400).json({
-      error: 'All fields must be filled',
+      message: 'All fields must be filled',
     });
   }
 
