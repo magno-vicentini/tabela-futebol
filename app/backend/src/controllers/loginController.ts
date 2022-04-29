@@ -15,14 +15,12 @@ export default class LoginController {
     this.userService = new UserService();
   }
 
-  public async validateLogin(req: Request, res: Response) {
+  public async login(req: Request, res: Response) {
     const { email, password } = req.body;
 
     const user = await this.userService.findUser(email, password);
 
-    if (!user) {
-      return res.status(401).json({ message: 'Incorrect email or password' });
-    }
+    if (!user) return res.status(401).json({ error: 'Incorrect email or password' });
 
     const JWT_SECRET = await fs.readFile('jwt.evaluation.key', 'utf-8');
 
@@ -36,5 +34,11 @@ export default class LoginController {
       user,
       token,
     });
+  }
+
+  public static validateLogin(req: Request, res: Response) {
+    const { user } = req.body;
+
+    res.status(200).json(user.payload.user.role);
   }
 }

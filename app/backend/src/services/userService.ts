@@ -11,7 +11,6 @@ export default class UserService {
       return null;
     }
     if (!bcrypt.compareSync(password, userLogin.password)) {
-      console.log(bcrypt.compareSync(password, userLogin.password));
       return null;
     }
 

@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import auth from '../middlewares/auth';
 import { LoginController } from '../controllers';
 import { valEmail, valPassword } from '../middlewares';
 
@@ -10,6 +11,12 @@ login.post(
   '/',
   valEmail,
   valPassword,
-  async (req, res) => loginController.validateLogin(req, res),
+  async (req, res) => loginController.login(req, res),
+);
+
+login.get(
+  '/validate',
+  auth,
+  async (req, res) => LoginController.validateLogin(req, res),
 );
 export default login;
