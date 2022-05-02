@@ -20,7 +20,7 @@ export default class LoginController {
 
     const user = await this.userService.findUser(email, password);
 
-    if (!user) return res.status(401).json({ error: 'Incorrect email or password' });
+    if (!user) return res.status(401).json({ message: 'Incorrect email or password' });
 
     const JWT_SECRET = await fs.readFile('jwt.evaluation.key', 'utf-8');
 

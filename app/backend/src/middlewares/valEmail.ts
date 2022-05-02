@@ -12,7 +12,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
   }
 
   if (!emailRegex.test(email)) {
-    return res.status(400).json({ message: '"email" must be a valid email' });
+    return res.status(401).json({ message: 'Incorrect email or password' });
   }
   next();
 };

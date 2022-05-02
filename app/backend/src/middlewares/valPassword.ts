@@ -10,8 +10,8 @@ export default (req: Request, res: Response, next: NextFunction) => {
   }
 
   if (password.length <= 6) {
-    return res.status(422).json({
-      message: 'Password must be longer than 6 characters',
+    return res.status(401).json({
+      message: 'Password must have at least 6 characters',
     });
   }
   next();
