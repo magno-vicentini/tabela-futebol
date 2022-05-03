@@ -52,8 +52,19 @@ export default class MatchesController {
 
     await this.matchesService.updateProgress(id);
 
-    const matchById = await this.matchesService.findById(id);
+    const updateById = await this.matchesService.findById(id);
 
-    res.status(200).json(matchById);
+    res.status(200).json(updateById);
+  }
+
+  public async updateGoals(req: Request, res: Response) {
+    const { id } = req.params;
+    const { homeTeamGoals, awayTeamGoals } = req.body;
+    await this
+      .matchesService.updateGoals(id, homeTeamGoals, awayTeamGoals);
+
+    const updateGoals = await this.matchesService.findById(id);
+
+    res.status(200).json(updateGoals);
   }
 }

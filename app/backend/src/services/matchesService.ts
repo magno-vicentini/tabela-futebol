@@ -70,4 +70,14 @@ export default class MatchesService {
     }
     return matchById;
   }
+
+  public async updateGoals(id: string, homeGoals: number, awayGoals: number): Promise<void> {
+    await this.model.update(
+      {
+        homeTeamGoals: homeGoals,
+        awayTeamGoals: awayGoals,
+      },
+      { where: { id } },
+    );
+  }
 }

@@ -17,4 +17,6 @@ matchesRouter.post(
 );
 
 matchesRouter.patch('/:id/finish', async (req, res) => matchesController.updateProgress(req, res));
+
+matchesRouter.patch('/:id', async (req, res) => matchesController.updateGoals(req, res));
 export default matchesRouter;
