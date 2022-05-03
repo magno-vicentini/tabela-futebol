@@ -43,9 +43,31 @@ export default class MatchesService {
     return matches;
   }
 
-  public async createMatche(payload: object): Promise<IMatches> {
+  public async createMatch(payload: object): Promise<IMatches> {
     const create = await this.model.create({ ...payload });
 
     return create;
+  }
+
+  public async updateProgress(id: string): Promise<boolean> {
+    const update = await this.model.update(
+      { inProgress: false },
+      {
+        where: { id },
+      },
+    );
+    if (update) {
+      return true;
+    }
+    return false;
+  }
+
+  public async findById(id: string): Promise<IMatches | null> {
+    const matchById = await this.model.findByPk(id);
+
+    if (!matchById) {
+      return null;
+    }
+    return matchById;
   }
 }

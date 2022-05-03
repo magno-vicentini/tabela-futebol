@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import auth from '../middlewares/auth';
 import { MatchesController } from '../controllers';
+import valTeams from '../middlewares/valTeams';
 
 const matchesRouter = Router();
 
@@ -11,6 +12,9 @@ matchesRouter.get('/', async (req, res) => matchesController.allMatches(req, res
 matchesRouter.post(
   '/',
   auth,
-  async (req, res) => matchesController.createMatche(req, res),
+  valTeams,
+  async (req, res) => matchesController.createMatch(req, res),
 );
+
+matchesRouter.patch('/:id/finish', async (req, res) => matchesController.updateProgress(req, res));
 export default matchesRouter;
