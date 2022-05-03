@@ -48,7 +48,7 @@ Matches.init({
   // ... Outras configs
   underscored: true,
   sequelize: db,
-  // modelName: 'example',
+  modelName: 'matches',
   timestamps: false,
 });
 
@@ -56,8 +56,12 @@ Matches.init({
   * `Workaround` para aplicar as associations em TS:
   * Associations 1:N devem ficar em uma das instâncias de modelo
   * */
-TeamsModel.belongsTo(Matches, { foreignKey: 'homeTeam', as: 'matches_ibfk_1' });
-TeamsModel.belongsTo(Matches, { foreignKey: 'awayTeam', as: 'matches_ibfk_2' });
+TeamsModel.hasMany(Matches, { foreignKey: 'homeTeam', as: 'matches_1' });
+TeamsModel.hasMany(Matches, { foreignKey: 'awayTeam', as: 'matches_2' });
+
+Matches.belongsTo(TeamsModel, { foreignKey: 'homeTeam', as: 'teams_1' });
+Matches.belongsTo(TeamsModel, { foreignKey: 'awayTeam', as: 'teams_2' });
+
 // OtherModel.belongsTo(Example, { foreignKey: 'campoA', as: 'campoEstrangeiroA' });
 // OtherModel.belongsTo(Example, { foreignKey: 'campoB', as: 'campoEstrangeiroB' });
 
