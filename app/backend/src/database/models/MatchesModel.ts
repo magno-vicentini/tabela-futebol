@@ -56,11 +56,11 @@ Matches.init({
   * `Workaround` para aplicar as associations em TS:
   * Associations 1:N devem ficar em uma das instâncias de modelo
   * */
-TeamsModel.hasMany(Matches, { foreignKey: 'homeTeam', as: 'matches_1' });
-TeamsModel.hasMany(Matches, { foreignKey: 'awayTeam', as: 'matches_2' });
+TeamsModel.hasMany(Matches, { foreignKey: 'homeTeam', as: 'teamHome' });
+TeamsModel.hasMany(Matches, { foreignKey: 'awayTeam', as: 'teamAway' });
 
-Matches.belongsTo(TeamsModel, { foreignKey: 'homeTeam', as: 'teams_1' });
-Matches.belongsTo(TeamsModel, { foreignKey: 'awayTeam', as: 'teams_2' });
+Matches.belongsTo(TeamsModel, { foreignKey: 'homeTeam', as: 'teamHome' });
+Matches.belongsTo(TeamsModel, { foreignKey: 'awayTeam', as: 'teamAway' });
 
 // OtherModel.belongsTo(Example, { foreignKey: 'campoA', as: 'campoEstrangeiroA' });
 // OtherModel.belongsTo(Example, { foreignKey: 'campoB', as: 'campoEstrangeiroB' });
