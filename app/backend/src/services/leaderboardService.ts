@@ -13,7 +13,6 @@ export default class LeaderboardService {
 
   constructor() {
     this.teamStatistics = LeaderboardService.resetTable();
-    this.classification();
   }
 
   static resetTable() {
@@ -32,23 +31,22 @@ export default class LeaderboardService {
     return table;
   }
 
-  get homeLeaderBoard() {
-    return this.leaderboard.sort((a, b) => b.goalsOwn - a.goalsOwn)
+  public homeLeaderBoard():ILeaderboard[] {
+    const leaderboardHome = this.leaderboard.sort((a, b) => b.goalsOwn - a.goalsOwn)
       .sort((a, b) => b.goalsFavor - a.goalsFavor)
       .sort((a, b) => b.goalsBalance - a.goalsBalance)
       .sort((a, b) => b.totalVictories - a.totalVictories)
       .sort((a, b) => b.totalPoints - a.totalPoints);
+    this.leaderboard = [];
+    return leaderboardHome;
   }
 
-  public async classification(): Promise<void> {
+  public async classificationHome(): Promise<ILeaderboard[]> {
     const allTeams = await this.teamModel.findAll();
     const allMatches = await this.matchesModel.findAll({ where: { inProgress: false } });
     allTeams.forEach((team) => {
       allMatches.forEach((match) => {
         if (team.id === match.homeTeam) {
-          this.teamStatistics.goalsFavor += match.homeTeamGoals;
-          this.teamStatistics.goalsOwn += match.awayTeamGoals;
-          this.teamStatistics.totalGames += 1;
           this.gameResults(match.homeTeamGoals, match.awayTeamGoals);
         }
       });
@@ -59,9 +57,13 @@ export default class LeaderboardService {
       this.leaderboard = [...this.leaderboard, this.teamStatistics];
       this.teamStatistics = LeaderboardService.resetTable();
     });
+    return this.homeLeaderBoard();
   }
 
   public gameResults(homeTeamGoals: number, awayTeamGoals: number) {
+    this.teamStatistics.goalsFavor += homeTeamGoals;
+    this.teamStatistics.goalsOwn += awayTeamGoals;
+    this.teamStatistics.totalGames += 1;
     if (homeTeamGoals === awayTeamGoals) {
       this.teamStatistics.totalDraws += 1;
       this.teamStatistics.totalPoints += 1;
@@ -76,14 +78,9 @@ export default class LeaderboardService {
   }
 
   public efficiency() {
-    console.log(this.leaderboard);
     const operation = ((this
       .teamStatistics.totalPoints / (this.teamStatistics.totalGames * 3)) * 100);
 
     this.teamStatistics.efficiency = Number(operation.toFixed(2));
   }
 }
-
-// const operation = (
-//   (teamStatistics.totalPoints / (teamStatistics.totalGames * 3)) * 100);
-// teamStatistics.efficiency = Number(operation.toFixed(2));

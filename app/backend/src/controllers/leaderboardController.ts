@@ -9,7 +9,7 @@ export default class LeaderboardController {
   }
 
   public async tableHomeTeams(req: Request, res: Response) {
-    const homeTeams = this.leaderboardService.homeLeaderBoard;
+    const homeTeams = await this.leaderboardService.classificationHome();
 
     res.status(200).json(homeTeams);
   }
