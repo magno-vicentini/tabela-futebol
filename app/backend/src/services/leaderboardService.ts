@@ -42,8 +42,20 @@ export default class LeaderboardService {
   }
 
   public async classificationGeneral(): Promise<ILeaderboard[]> {
-    this.classificationHome();
-    this.classificationAway();
+    const allTeams = await this.teamModel.findAll();
+    const allMatches = await this.matchesModel.findAll({ where: { inProgress: false } });
+    allTeams.forEach((team) => {
+      allMatches.forEach((match) => {
+        if (team.id === match.homeTeam) {
+          this.gameResultsHome(match.homeTeamGoals, match.awayTeamGoals);
+        }
+        if (team.id === match.awayTeam) {
+          this.gameResultsAway(match.awayTeamGoals, match.homeTeamGoals);
+        }
+      });
+      this.teamStatistics.name = team.teamName;
+      this.statistcs();
+    });
     return this.sortLeaderBoard();
   }
 
@@ -57,11 +69,7 @@ export default class LeaderboardService {
         }
       });
       this.teamStatistics.name = team.teamName;
-      this.teamStatistics.goalsBalance = this.teamStatistics.goalsFavor
-      - this.teamStatistics.goalsOwn;
-      this.efficiency();
-      this.leaderboard = [...this.leaderboard, this.teamStatistics];
-      this.teamStatistics = LeaderboardService.resetTable();
+      this.statistcs();
     });
     return this.sortLeaderBoard();
   }
@@ -76,11 +84,7 @@ export default class LeaderboardService {
         }
       });
       this.teamStatistics.name = team.teamName;
-      this.teamStatistics.goalsBalance = this.teamStatistics.goalsFavor
-      - this.teamStatistics.goalsOwn;
-      this.efficiency();
-      this.leaderboard = [...this.leaderboard, this.teamStatistics];
-      this.teamStatistics = LeaderboardService.resetTable();
+      this.statistcs();
     });
     return this.sortLeaderBoard();
   }
@@ -119,10 +123,13 @@ export default class LeaderboardService {
     }
   }
 
-  public efficiency() {
+  public statistcs() {
+    this.teamStatistics.goalsBalance = this.teamStatistics.goalsFavor
+      - this.teamStatistics.goalsOwn;
     const operation = ((this
       .teamStatistics.totalPoints / (this.teamStatistics.totalGames * 3)) * 100);
-
     this.teamStatistics.efficiency = Number(operation.toFixed(2));
+    this.leaderboard = [...this.leaderboard, this.teamStatistics];
+    this.teamStatistics = LeaderboardService.resetTable();
   }
 }

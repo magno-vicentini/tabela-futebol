@@ -19,4 +19,10 @@ export default class LeaderboardController {
 
     res.status(200).json(awayTeams);
   }
+
+  public async tableGeneral(req: Request, res: Response) {
+    const generalTeams = await this.leaderboardService.classificationGeneral();
+
+    res.status(200).json(generalTeams);
+  }
 }
