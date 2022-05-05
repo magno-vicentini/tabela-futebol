@@ -13,4 +13,10 @@ export default class LeaderboardController {
 
     res.status(200).json(homeTeams);
   }
+
+  public async tableAwayTeams(req: Request, res: Response) {
+    const awayTeams = await this.leaderboardService.classificationAway();
+
+    res.status(200).json(awayTeams);
+  }
 }
